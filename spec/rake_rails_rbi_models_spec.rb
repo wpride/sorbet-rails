@@ -16,6 +16,7 @@ RSpec.describe 'rake rails_rbi:models', type: :task do
         'spell_book.rbi',
         'wand.rbi',
         'wizard.rbi',
+        'squib.rbi',
       ]
     )
     if Object.const_defined?('ActiveStorage')
@@ -39,22 +40,33 @@ RSpec.describe 'rake rails_rbi:models', type: :task do
   end
 
   it 'generates selected model correctly' do
-    task.invoke("Wizard")
+    task.invoke("Wand")
     expect_files(
       base_dir: generated_dir_path,
       files: [
-        'wizard.rbi',
+        'wand.rbi',
       ]
     )
   end
 
   it 'generates more than 1 selected models correctly' do
-    task.invoke("Wizard","SpellBook")
+    task.invoke("Wand","SpellBook")
     expect_files(
       base_dir: generated_dir_path,
       files: [
         'spell_book.rbi',
+        'wand.rbi',
+      ]
+    )
+  end
+
+  it 'generates descendants of selected model correctly' do
+    task.invoke("Wizard")
+    expect_files(
+      base_dir: generated_dir_path,
+      files: [
         'wizard.rbi',
+        'squib.rbi',
       ]
     )
   end
@@ -76,6 +88,6 @@ RSpec.describe 'rake rails_rbi:models', type: :task do
     end
 
     # double check we generate correct files
-    expect(generated_files.sort).to eql(files)
+    expect(generated_files).to match_array(files)
   end
 end

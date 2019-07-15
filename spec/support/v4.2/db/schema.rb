@@ -1,4 +1,3 @@
-# typed: false
 # encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
@@ -12,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190622000000) do
+ActiveRecord::Schema.define(version: 20190715221659) do
 
   create_table "spell_books", force: :cascade do |t|
     t.string  "name"
@@ -40,6 +39,7 @@ ActiveRecord::Schema.define(version: 20190622000000) do
     t.text     "notes"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "type",         default: "Wizard", null: false
   end
 
 end
