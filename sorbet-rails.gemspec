@@ -9,11 +9,13 @@ Gem::Specification.new do |s|
   s.license       = 'MIT'
   s.require_paths = ["lib"]
   s.files         = Dir.chdir(File.expand_path('..', __FILE__)) do
-    `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+    `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features|lib/sorbet)/}) }
   end
   s.test_files    = Dir.chdir(File.expand_path('..', __FILE__)) do
     `git ls-files -z`.split("\x0").select { |f| f.match(%r{^(test|spec|features)/}) }
   end
+
+  s.add_dependency 'parlour', '~> 0.6.0'
 
   # Development
   s.add_development_dependency 'rspec', '~> 3.8', '>= 3.8'

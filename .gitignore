@@ -79,9 +79,11 @@ build-iPhoneSimulator/
 # Ignore sorbet-rails generated files
 /spec/support/**/sorbet/rails-rbi/*
 /spec/support/**/sorbet/rails-rbi/**/*
+# Ignore hidden-definition.rbi because we will rerun it
+/spec/support/**/sorbet/rbi/hidden-definitions/*
+/spec/support/**/sorbet/rbi/hidden-definitions/**/*
 
 # Ignore sorbet files in v5.2-no-sorbet
-/spec/support/v5.2-no-sorbet/sorbet_test_cases.rb
 /spec/support/v5.2-no-sorbet/sorbet/*
 /spec/support/v5.2-no-sorbet/sorbet/**/*
 
