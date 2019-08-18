@@ -15,5 +15,13 @@ class SorbetRails::Railtie < Rails::Railtie
       ActiveRecord::Base.extend SorbetRails::CustomFinderMethods
       ActiveRecord::Relation.include SorbetRails::CustomFinderMethods
     end
+
+    # in test & dev, the models are not pre-loaded, we need to load them manually
+    Rails.application.eager_load! unless Rails.env.production?
+    ActiveRecord::Base.descendants.each do |model|
+      model.send(:public_constant, :ActiveRecord_Relation)
+      model.send(:public_constant, :ActiveRecord_AssociationRelation)
+      model.send(:public_constant, :ActiveRecord_Associations_CollectionProxy)
+    end
   end
 end
