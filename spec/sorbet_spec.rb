@@ -48,10 +48,9 @@ RSpec.describe 'sorbet' do
       'bundle', 'exec', 'srb', 'tc', '--typed-override=typed-override.yaml',
       chdir: Rails.root.to_path,
     )
-    expect(stdout).to eql('')
-    expect(status.exitstatus).to eql(0)
     expected_file_path = 'expected_srb_tc_output.txt'
     expect_match_file(stderr, expected_file_path)
+    expect(stdout).to eql('')
   end
 
   it 'passes sorbet dynamic checks' do
