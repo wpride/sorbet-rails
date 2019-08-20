@@ -18,6 +18,7 @@ class SorbetRails::Railtie < Rails::Railtie
 
     # in test & dev, the models are not pre-loaded, we need to load them manually
     Rails.application.eager_load! unless Rails.env.production?
+    puts '---', ActiveRecord::Base.descendants
     ActiveRecord::Base.descendants.each do |model|
       model.send(:public_constant, :ActiveRecord_Relation)
       model.send(:public_constant, :ActiveRecord_AssociationRelation)
