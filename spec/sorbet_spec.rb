@@ -30,6 +30,17 @@ RSpec.describe 'sorbet' do
       chdir: Rails.root.to_path,
     )
 
+    stdout, stderr, status = Open3.capture3(
+      'bundle', 'exec', 'srb', 'tc',
+      chdir: Rails.root.to_path,
+    )
+
+    puts '>>> output of srb tc after initialization'
+    puts '-- stdout', stdout
+    puts '-- stderr', stderr
+    puts '-- status', status
+    puts '<<< end'
+
     # run sorbet-rails rake tasks
     Rake::Task['rails_rbi:all'].invoke
 
