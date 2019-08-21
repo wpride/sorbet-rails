@@ -35,12 +35,6 @@ RSpec.describe 'sorbet' do
       chdir: Rails.root.to_path,
     )
 
-    puts '>>> output of srb tc after initialization'
-    puts '-- stdout', stdout
-    puts '-- stderr', stderr
-    puts '-- status', status
-    puts '<<< end'
-
     # run sorbet-rails rake tasks
     Rake::Task['rails_rbi:all'].invoke
 
@@ -51,15 +45,11 @@ RSpec.describe 'sorbet' do
       'bundle', 'exec', 'srb', 'rbi', 'hidden-definitions',
       chdir: Rails.root.to_path,
     )
-    puts '--- srb rbi hidden-definitions ---'
-    puts stdout, stderr, status
 
     stdout, stderr, status = Open3.capture3(
       'bundle', 'exec', 'srb', 'rbi', 'todo',
       chdir: Rails.root.to_path,
     )
-    puts '--- srb rbi todo ---'
-    puts stdout, stderr, status
   end
 
   it 'returns expected sorbet tc result' do
