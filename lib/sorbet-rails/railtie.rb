@@ -14,15 +14,20 @@ class SorbetRails::Railtie < Rails::Railtie
     ActiveSupport.on_load(:active_record) do
       ActiveRecord::Base.extend SorbetRails::CustomFinderMethods
       ActiveRecord::Relation.include SorbetRails::CustomFinderMethods
-    end
 
-    # in test & dev, the models are not pre-loaded, we need to load them manually
-    Rails.application.eager_load! unless Rails.env.production?
-    puts '---', ActiveRecord::Base.descendants
-    ActiveRecord::Base.descendants.each do |model|
-      model.send(:public_constant, :ActiveRecord_Relation)
-      model.send(:public_constant, :ActiveRecord_AssociationRelation)
-      model.send(:public_constant, :ActiveRecord_Associations_CollectionProxy)
+      class ::ActiveRecord::Base
+        # open ActiveRecord::Base to override inherited
+        class << self
+          alias_method :sbr_old_inherited, :inherited
+
+          def inherited(child)
+            sbr_old_inherited(child)
+            child.send(:public_constant, :ActiveRecord_Relation)
+            child.send(:public_constant, :ActiveRecord_AssociationRelation)
+            child.send(:public_constant, :ActiveRecord_Associations_CollectionProxy)
+          end
+        end
+      end
     end
   end
 end
