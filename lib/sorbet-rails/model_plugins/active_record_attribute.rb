@@ -15,6 +15,7 @@ class SorbetRails::ModelPlugins::ActiveRecordAttribute < SorbetRails::ModelPlugi
     model_class_rbi.create_include(attribute_module_name)
 
     columns_hash.sort.each do |column_name, column_def|
+      next unless SorbetRails::Utils.valid_method_name?(column_name.to_s)
       if @model_class.defined_enums.has_key?(column_name)
         # enum attribute is treated differently
         assignable_type = "T.any(Integer, String, Symbol)"

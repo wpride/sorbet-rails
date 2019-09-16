@@ -47,7 +47,9 @@ class SorbetRails::ModelPlugins::ActiveRecordAssoc < SorbetRails::ModelPlugins::
         end
       else
         # In Rails 5 and later, belongs_to are required unless specified to be optional
-        assoc_type = assoc_class if !reflection.options[:optional]
+        if reflection.options.key?(:optional)
+          assoc_type = assoc_class if !reflection.options[:optional]
+        end
       end
     end
 
