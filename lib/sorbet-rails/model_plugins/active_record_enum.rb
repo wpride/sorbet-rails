@@ -3,33 +3,7 @@ require ('sorbet-rails/model_plugins/base')
 require("sorbet-rails/utils")
 class SorbetRails::ModelPlugins::ActiveRecordEnum < SorbetRails::ModelPlugins::Base
 
-  def prefix_suffix(enum_calls, enum_name)
-    unless enum_calls
-      return '', ''
-    end
-    enum_call = enum_calls.find {|call| call.has_key?(enum_name.to_sym)}
-    enum_prefix = enum_call[:_prefix]
-    prefix =
-      if enum_prefix == true
-        "#{enum_name}_"
-      elsif enum_prefix
-        "#{enum_prefix}_"
-      else
-        ''
-      end
-    enum_suffix = enum_call[:_suffix]
-    suffix =
-      if enum_suffix == true
-        "_#{enum_name}"
-      elsif enum_suffix
-        "_#{enum_suffix}"
-      else
-        ''
-      end
-    return prefix, suffix
-  end
-
-  sig { implementation.params(root: Parlour::RbiGenerator::Namespace).void }
+  sig { override.params(root: Parlour::RbiGenerator::Namespace).void }
   def generate(root)
     return unless model_class.defined_enums.size > 0
 
@@ -58,7 +32,30 @@ class SorbetRails::ModelPlugins::ActiveRecordEnum < SorbetRails::ModelPlugins::B
         class_method: true,
       )
 
-      prefix, suffix = prefix_suffix(enum_calls, enum_name)
+      enum_call = ActiveRecordOverrides.instance.get_enum_call(@model_class, enum_name.to_sym)
+      if enum_call.nil?
+        puts "Error: unable to find enum call for enum #{enum_name}, model #{self.model_class_name}"
+        next
+      end
+
+      enum_prefix = enum_call[:_prefix]
+      prefix =
+        if enum_prefix == true
+          "#{enum_name}_"
+        elsif enum_prefix
+          "#{enum_prefix}_"
+        else
+          ''
+        end
+      enum_suffix = enum_call[:_suffix]
+      suffix =
+        if enum_suffix == true
+          "_#{enum_name}"
+        elsif enum_suffix
+          "_#{enum_suffix}"
+        else
+          ''
+        end
 
       enum_hash.keys.each do |enum_val|
         next unless SorbetRails::Utils.valid_method_name?(enum_val.to_s)
